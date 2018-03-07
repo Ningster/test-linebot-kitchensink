@@ -18,6 +18,7 @@ import errno
 import os
 import sys
 import tempfile
+import logging
 from argparse import ArgumentParser
 
 from flask import Flask, request, abort
@@ -41,6 +42,11 @@ from linebot.models import (
 )
 
 app = Flask(__name__)
+
+if __name__ != "__main__":
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
