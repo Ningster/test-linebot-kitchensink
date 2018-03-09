@@ -43,6 +43,7 @@ from linebot.models import (
 
 app = Flask(__name__)
 
+# Set Flask logger's handler and level the same as Gunicorn's.
 if __name__ != "__main__":
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
@@ -63,7 +64,6 @@ handler = WebhookHandler(channel_secret)
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-
 # function for create tmp dir for download content
 def make_static_tmp_dir():
     try:
@@ -74,6 +74,8 @@ def make_static_tmp_dir():
         else:
             raise
 
+# create tmp dir for download content
+make_static_tmp_dir()
 
 @app.route("/callback", methods=['POST'])
 def callback():
